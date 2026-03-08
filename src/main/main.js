@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, Menu } = require('electron');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env') });
 
@@ -53,6 +53,11 @@ function showSettings() {
 }
 
 app.on('ready', () => {
+  // Hide the in-window menu bar on Windows so the UI matches macOS
+  if (process.platform === 'win32') {
+    Menu.setApplicationMenu(null);
+  }
+
   createWindow();
   if (!isTest) {
     createTray(showSettings);

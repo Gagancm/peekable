@@ -1,7 +1,13 @@
-const OpenAI = require('openai');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env') });
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const OpenAI = require('openai');
+
+function getOpenAIClient() {
+  const apiKey = process.env.OPENAI_API_KEY?.trim();
+  if (!apiKey) return null;
+  return new OpenAI({ apiKey });
+}
 
 function buildPrompt(categories) {
   const enabledCategories = Object.entries(categories)
@@ -39,6 +45,12 @@ If nothing concerning is detected, set triggered to false. Only trigger if you h
 }
 
 async function analyzeScreenshot(screenshotBuffer, categories) {
+  const openai = getOpenAIClient();
+  if (!openai) {
+    console.warn('OPENAI_API_KEY not set; skipping AI analysis.');
+    return { triggered: false };
+  }
+
   const base64Image = screenshotBuffer.toString('base64');
   const prompt = buildPrompt(categories);
 

@@ -5,6 +5,7 @@
   "main": "src/main/main.js",
   "scripts": {
     "start": "electron .",
+    "dev": "electronmon .",
     "build": "electron-builder",
     "test": "npx playwright test"
   },
@@ -29,6 +30,7 @@
     "@playwright/test": "^1.58.2",
     "electron": "^33.0.0",
     "electron-builder": "^25.1.8",
+    "electronmon": "^2.0.4",
     "playwright-core": "^1.58.2"
   }
 }
