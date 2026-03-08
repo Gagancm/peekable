@@ -13,7 +13,7 @@ function buildPrompt(categories) {
   const enabledCategories = Object.entries(categories)
     .filter(([, config]) => config.enabled)
     .map(([key, config]) => {
-      let desc = `- ${config.label}: ${config.description}`;
+      let desc = `- ${key} (${config.label}): ${config.description}`;
       if (key === 'adultContent' && config.sensitivity) {
         desc += ` (sensitivity: ${config.sensitivity})`;
       }
@@ -35,7 +35,7 @@ ${enabledCategories.join('\n')}
 Respond with ONLY valid JSON in this exact format:
 {
   "triggered": true/false,
-  "category": "category key if triggered, null otherwise",
+  "category": "exact category key from list above (e.g. strangerInteraction, adultContent) if triggered, null otherwise",
   "categoryLabel": "human readable category name if triggered, null otherwise",
   "confidence": "low", "medium", or "high",
   "description": "Brief 1-2 sentence description of what you see on screen that triggered the alert. Be specific but concise."
@@ -53,7 +53,7 @@ async function analyzeScreenshot(screenshotBuffer, categories) {
 
   const base64Image = screenshotBuffer.toString('base64');
   const prompt = buildPrompt(categories);
-
+  console.log("analyzing screenshot")
   try {
     const response = await openai.chat.completions.create({
       model: 'gpt-4o',
@@ -75,8 +75,8 @@ async function analyzeScreenshot(screenshotBuffer, categories) {
       max_tokens: 300,
       temperature: 0.1
     });
-
     const text = response.choices[0].message.content.trim();
+    console.log({text})
     // Extract JSON from response (handle markdown code blocks)
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {

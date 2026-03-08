@@ -236,7 +236,7 @@ document.getElementById('step4-next').addEventListener('click', () => {
     <p><strong>Email:</strong> ${onboardingData.email}</p>
     <p><strong>Monitoring:</strong> ${enabledCats.join(', ') || 'None'}</p>
     <p><strong>Screenshot interval:</strong> Every ${onboardingData.screenshotIntervalSeconds} seconds</p>
-    <p><strong>Alert cooldown:</strong> ${onboardingData.alertCooldownMinutes} minutes</p>
+    <p><strong>Alert cooldown:</strong> ${onboardingData.alertCooldownMinutes === 0 ? 'No cooldown' : onboardingData.alertCooldownMinutes + ' minutes'}</p>
     <p><strong>Confidence threshold:</strong> ${onboardingData.confidenceThreshold}</p>
   `;
   showStep('step-5');

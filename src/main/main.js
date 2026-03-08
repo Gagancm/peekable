@@ -160,7 +160,7 @@ ipcMain.handle('save-settings', (event, config) => {
   if (config.email) store.set('parentEmail', config.email);
   if (config.categories) store.set('categories', config.categories);
   if (config.screenshotIntervalSeconds) store.set('screenshotIntervalSeconds', config.screenshotIntervalSeconds);
-  if (config.alertCooldownMinutes) store.set('alertCooldownMinutes', config.alertCooldownMinutes);
+  if (config.alertCooldownMinutes != null) store.set('alertCooldownMinutes', config.alertCooldownMinutes);
   if (config.confidenceThreshold) store.set('confidenceThreshold', config.confidenceThreshold);
   if (config.newPassword) setPassword(config.newPassword);
   if (!isTest) {

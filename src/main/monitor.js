@@ -10,6 +10,9 @@ let lastGlobalAlertTime = 0;
 let monitorInterval = null;
 let checkInProgress = false;
 
+// Hard per-category dedup: never report the same violation twice within 1 hour
+const PER_CATEGORY_DEDUP_MS = 60 * 60 * 1000;
+
 function isOnCooldown(category) {
   const cooldownMs = store.get('alertCooldownMinutes') * 60 * 1000;
   const now = Date.now();
@@ -19,9 +22,9 @@ function isOnCooldown(category) {
     return true;
   }
 
-  // Per-category cooldown
+  // Per-category dedup — same violation cannot repeat within 1 hour
   const lastTime = lastAlertTimes[category];
-  if (lastTime && (now - lastTime) < cooldownMs) {
+  if (lastTime && (now - lastTime) < PER_CATEGORY_DEDUP_MS) {
     return true;
   }
 
