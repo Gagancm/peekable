@@ -1,0 +1,34 @@
+{
+  "name": "peekable",
+  "version": "1.0.0",
+  "description": "Peekable - Protect your child from online harm",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "test": "npx playwright test"
+  },
+  "build": {
+    "appId": "com.peekable.app",
+    "productName": "Peekable",
+    "mac": {
+      "category": "public.app-category.utilities",
+      "extendedInfo": {
+        "NSScreenCaptureDescription": "Peekable needs screen recording access to monitor your child's activity."
+      }
+    }
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "electron-store": "^8.2.0",
+    "nodemailer": "^6.9.13",
+    "openai": "^4.68.0",
+    "screenshot-desktop": "^1.15.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8",
+    "playwright-core": "^1.58.2"
+  }
+}

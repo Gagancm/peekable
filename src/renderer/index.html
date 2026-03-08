@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Peekable</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="titlebar"></div>
+  <div id="app">
+    <!-- Password Prompt (shown when reopening after onboarding) -->
+    <div id="password-prompt" class="step" style="display:none;">
+      <h1>Peekable</h1>
+      <p>Enter your parent password to access settings.</p>
+      <div class="form-group">
+        <input type="password" id="unlock-password" placeholder="Password" />
+        <p id="unlock-error" class="error" style="display:none;">Incorrect password</p>
+      </div>
+      <button id="unlock-btn" class="btn-primary">Unlock</button>
+    </div>
+
+    <!-- Step 1: Account Setup -->
+    <div id="step-1" class="step">
+      <h1>Welcome to Peekable</h1>
+      <p>Protect your child from harmful online content. Let's set up your parent account.</p>
+      <div class="form-group">
+        <label for="parent-email">Your Email Address</label>
+        <input type="email" id="parent-email" placeholder="parent@example.com" />
+      </div>
+      <div class="form-group">
+        <label for="parent-password">Set a Password</label>
+        <input type="password" id="parent-password" placeholder="Password" />
+        <small>You'll need this to change settings later</small>
+      </div>
+      <div class="form-group">
+        <label for="parent-password-confirm">Confirm Password</label>
+        <input type="password" id="parent-password-confirm" placeholder="Confirm password" />
+        <p id="password-error" class="error" style="display:none;"></p>
+      </div>
+      <button id="step1-next" class="btn-primary">Next</button>
+    </div>
+
+    <!-- Step 2: Screen Permission -->
+    <div id="step-2" class="step" style="display:none;">
+      <h1>Screen Recording Permission</h1>
+      <p>Peekable needs Screen Recording permission to monitor your child's activity.</p>
+      <div id="permission-instructions">
+        <ol>
+          <li>Click <strong>"Open Settings"</strong> below</li>
+          <li>Find <strong>"Peekable"</strong> in the list</li>
+          <li>Toggle it <strong>ON</strong></li>
+          <li>Come back to this window</li>
+        </ol>
+      </div>
+      <div id="permission-status" class="status-box">
+        <span id="permission-icon">&#x26A0;</span>
+        <span id="permission-text">Permission not yet granted</span>
+      </div>
+      <button id="open-settings-btn" class="btn-secondary">Open System Settings</button>
+      <button id="check-permission-btn" class="btn-primary">Check Permission</button>
+      <button id="step2-next" class="btn-primary" style="display:none;">Next</button>
+      <p id="permission-warning" class="error" style="display:none;">
+        Monitoring won't work without this permission. Please grant it to continue.
+      </p>
+    </div>
+
+    <!-- Step 3: Alert Categories -->
+    <div id="step-3" class="step" style="display:none;">
+      <h1>What should we watch for?</h1>
+      <p>Toggle the categories you want to be alerted about.</p>
+      <div id="categories-list"></div>
+      <button id="step3-next" class="btn-primary">Next</button>
+    </div>
+
+    <!-- Step 4: Sensitivity & Frequency -->
+    <div id="step-4" class="step" style="display:none;">
+      <h1>Sensitivity Settings</h1>
+      <div class="form-group">
+        <label>Screenshot Interval</label>
+        <select id="screenshot-interval">
+          <option value="3">Every 3 seconds</option>
+          <option value="5" selected>Every 5 seconds</option>
+          <option value="10">Every 10 seconds</option>
+          <option value="30">Every 30 seconds</option>
+          <option value="60">Every 60 seconds</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Alert Cooldown</label>
+        <select id="alert-cooldown">
+          <option value="5">5 minutes</option>
+          <option value="15" selected>15 minutes</option>
+          <option value="30">30 minutes</option>
+          <option value="60">60 minutes</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Confidence Threshold</label>
+        <select id="confidence-threshold">
+          <option value="low">Low (more alerts, some false positives)</option>
+          <option value="medium" selected>Medium (balanced)</option>
+          <option value="high">High (fewer alerts, only high confidence)</option>
+        </select>
+      </div>
+      <button id="step4-next" class="btn-primary">Next</button>
+    </div>
+
+    <!-- Step 5: Confirmation -->
+    <div id="step-5" class="step" style="display:none;">
+      <h1>All Set!</h1>
+      <p>Here's a summary of your settings:</p>
+      <div id="summary"></div>
+      <button id="start-monitoring" class="btn-primary btn-large">Start Monitoring</button>
+    </div>
+
+    <!-- Settings Panel (shown after password unlock) -->
+    <div id="settings-panel" class="step" style="display:none;">
+      <h1>Peekable Settings</h1>
+      <div class="form-group">
+        <label for="settings-email">Parent Email</label>
+        <input type="email" id="settings-email" />
+      </div>
+      <div id="settings-categories-list"></div>
+      <div class="form-group">
+        <label>Screenshot Interval</label>
+        <select id="settings-screenshot-interval">
+          <option value="3">Every 3 seconds</option>
+          <option value="5">Every 5 seconds</option>
+          <option value="10">Every 10 seconds</option>
+          <option value="30">Every 30 seconds</option>
+          <option value="60">Every 60 seconds</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Alert Cooldown</label>
+        <select id="settings-alert-cooldown">
+          <option value="5">5 minutes</option>
+          <option value="15">15 minutes</option>
+          <option value="30">30 minutes</option>
+          <option value="60">60 minutes</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Confidence Threshold</label>
+        <select id="settings-confidence-threshold">
+          <option value="low">Low (more alerts, some false positives)</option>
+          <option value="medium">Medium (balanced)</option>
+          <option value="high">High (fewer alerts, only high confidence)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="settings-new-password">New Password (leave blank to keep current)</label>
+        <input type="password" id="settings-new-password" placeholder="New password (optional)" />
+      </div>
+      <button id="save-settings" class="btn-primary">Save Settings</button>
+      <button id="close-settings" class="btn-secondary">Close</button>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
